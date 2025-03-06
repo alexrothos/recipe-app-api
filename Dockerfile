@@ -24,5 +24,6 @@ ENV PATH="/py/bin:$PATH"
 
 USER django-user
 
-# Testing linting : docker-compose run --rm app sh -c "/py/bin/flake8"
+# Testing linting : << docker-compose run --rm app sh -c "/py/bin/flake8" >> OR << docker-compose run --rm app flake8 /app >> (name of the app, the service and the path to the app)
 # Creating Django project : docker-compose run --rm app sh -c "/py/bin/django-admin startproject app ."
+# Running tests : docker-compose run --rm app sh -c "/py/bin/python manage.py test"
