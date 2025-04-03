@@ -20,10 +20,11 @@ services:
       DB_USER: devuser
       DB_PASSWORD: changeme
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   
   db:
-    image: postgres:13-alpine
+    image: postgres:13
     environment:
       POSTGRES_DB: devdb
       POSTGRES_USER: devuser
@@ -32,6 +33,15 @@ services:
       - "5432:5432"
     volumes:
       - dev-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    command:  # 👈 Override default command to set authentication
+    - "postgres"
+    - "-c"
+    - "listen_addresses=*"
 
 volumes:
   dev-db-data:
